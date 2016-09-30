@@ -20,23 +20,25 @@
 @interface HYPageView () <UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *topTabScrollView;
-
 @property (strong, nonatomic) UIScrollView *scrollView;
-
-@property (assign, nonatomic) NSInteger currentPage;
+@property (assign, nonatomic) NSInteger    currentPage;
 
 @end
 
 @implementation HYPageView{
     
-    NSArray <NSString *> *_titles;
-    NSArray *_viewControllers;
-    UIView  *_lineBottom;
+    NSArray        <NSString *> *_titles;
+    NSArray        *_viewControllers;
+    UIView         *_lineBottom;
     NSMutableArray *_titleButtons;
     NSMutableArray *_titleSizeArray;
     NSMutableArray *_centerPoints;
-    CGFloat _contentOffset_x;
-
+    
+    NSMutableArray *_width_k_array;
+    NSMutableArray *_width_b_array;
+    NSMutableArray *_point_k_array;
+    NSMutableArray *_point_b_array;
+    
 }
 
 - (instancetype)initWithFrame:(CGRect)frame WithTitles:(NSArray *)titles WithViewControllers:(NSArray *)childViewControllers{
@@ -81,7 +83,7 @@
         NSMutableArray *equalIntervals = [NSMutableArray array];
         
         for (NSInteger i=0; i<_titles.count; i++) {
-            CGSize titleSize = [_titles[i] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+            CGSize titleSize = [_titles[i] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}];
             [titleSizeArray addObject:[NSValue valueWithCGSize:titleSize]];
             totalWidth += titleSize.width;
             [equalIntervals addObject:[NSNumber numberWithFloat:(equalX + titleSize.width/2)]];
@@ -108,6 +110,27 @@
             totalWidth = SCREEN_WIDTH;
         }
         _centerPoints = centerPoints;
+        NSLog(@"centerPoints %@ %@",centerPoints,_titleSizeArray);
+        
+        _width_k_array = [NSMutableArray array];
+        _width_b_array = [NSMutableArray array];
+        _point_k_array = [NSMutableArray array];
+        _point_b_array = [NSMutableArray array];
+        
+        for (NSInteger i=0; i<_titles.count-1; i++) {
+            CGFloat k = ([_centerPoints[i+1] floatValue] - [_centerPoints[i] floatValue])/SCREEN_WIDTH;
+            CGFloat b = [_centerPoints[i] floatValue] - k * i * SCREEN_WIDTH;
+            [_width_k_array addObject:[NSNumber numberWithFloat:k]];
+            [_width_b_array addObject:[NSNumber numberWithFloat:b]];
+        }
+        for (NSInteger i=0; i<_titles.count-1; i++) {
+            CGFloat k = ([_titleSizeArray[i+1] CGSizeValue].width - [_titleSizeArray[i] CGSizeValue].width)/SCREEN_WIDTH;
+            CGFloat b = [_titleSizeArray[i] CGSizeValue].width - k * i * SCREEN_WIDTH;
+            
+            [_point_k_array addObject:[NSNumber numberWithFloat:k]];
+            [_point_b_array addObject:[NSNumber numberWithFloat:b]];
+        }
+        
         _topTabScrollView.contentSize = CGSizeMake(totalWidth, 0);
         
         _titleButtons = [NSMutableArray array];
@@ -115,7 +138,7 @@
             UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
             titleButton.tag = i;
             [_titleButtons addObject:titleButton];
-            titleButton.titleLabel.font = [UIFont systemFontOfSize:18];
+            titleButton.titleLabel.font = [UIFont systemFontOfSize:16];
             
             [titleButton setTitle:_titles[i] forState:UIControlStateNormal];
             
@@ -157,6 +180,22 @@
     return _topTabScrollView;
 }
 
+- (CGFloat)getTitleWidth:(CGFloat)offset{
+    NSInteger index = (NSInteger)(offset / SCREEN_WIDTH);
+    CGFloat k = [_width_k_array[index] floatValue];
+    CGFloat b = [_width_b_array[index] floatValue];
+    CGFloat x = offset;
+    return  k * x + b;
+}
+- (CGFloat)getTitlePoint:(CGFloat)offset{
+    NSInteger index = (NSInteger)(offset / SCREEN_WIDTH);
+    CGFloat k = [_point_k_array[index] floatValue];
+    CGFloat b = [_point_b_array[index] floatValue];
+    CGFloat x = offset;
+    return  k * x + b;
+}
+
+
 - (void)touchAction:(UIButton *)button {
     [_scrollView setContentOffset:CGPointMake(SCREEN_WIDTH * button.tag, 0) animated:YES];
     self.currentPage = (SCREEN_WIDTH * button.tag + SCREEN_WIDTH / 2) / SCREEN_WIDTH;
@@ -168,66 +207,32 @@
 //开始减速
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     self.currentPage = (NSInteger)((scrollView.contentOffset.x + SCREEN_WIDTH / 2) / SCREEN_WIDTH);
-    [UIView animateWithDuration:.1 animations:^{
-        _lineBottom.frame = CGRectMake(0, TAB_HEIGHT - LINEBOTTOM_HEIGHT,[_titleSizeArray[self.currentPage] CGSizeValue].width, LINEBOTTOM_HEIGHT);
-        _lineBottom.center = CGPointMake([_centerPoints[self.currentPage] floatValue], _lineBottom.center.y);
-    }];
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
-    _lineBottom.frame = CGRectMake(0, TAB_HEIGHT - LINEBOTTOM_HEIGHT,[_titleSizeArray[self.currentPage] CGSizeValue].width, LINEBOTTOM_HEIGHT);
-    _lineBottom.center = CGPointMake([_centerPoints[self.currentPage] floatValue], _lineBottom.center.y);
 }
 //滚动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    if (_contentOffset_x < 1600 && scrollView.contentOffset.x > 1600) {
-        NSLog(@"%lf",scrollView.contentOffset.x - 1600);
-    }
-    if (_contentOffset_x > 1600 && scrollView.contentOffset.x < 1600) {
-        NSLog(@"%lf",scrollView.contentOffset.x - 1600);
-    }
-    
-    CGFloat offset = scrollView.contentOffset.x - _contentOffset_x;
-    _contentOffset_x = scrollView.contentOffset.x;
-    //NSLog(@"%f",scrollView.contentOffset.x);
-    if (scrollView.contentOffset.x<=0 || scrollView.contentOffset.x > SCREEN_WIDTH * (_titles.count-1)) {
+    if (scrollView.contentOffset.x<=0 || scrollView.contentOffset.x >= SCREEN_WIDTH * (_titles.count-1)) {
         return;
     }
     
-    CGFloat widthScale = 0;
-    CGFloat offsetScale = 0;
+    _lineBottom.center = CGPointMake([self getTitleWidth:scrollView.contentOffset.x], _lineBottom.center.y);
     
-    for (NSInteger i=0; i<_titles.count; i++) {
-        //寻找下一个点
-        CGFloat maxPointx = [_centerPoints[i] floatValue];
-        if (i==_titles.count-1) {
-            maxPointx += 1;
-        }
-        if (_lineBottom.center.x < maxPointx) {
-            if (i==0)break;
-            offsetScale = (([_centerPoints[i] floatValue] - [_centerPoints[i-1] floatValue]) / SCREEN_WIDTH) * offset;
-            CGFloat rightWidth = [_titleSizeArray[i] CGSizeValue].width;
-            CGFloat leftWidth = [_titleSizeArray[i-1] CGSizeValue].width;
-            widthScale = (rightWidth - leftWidth)/SCREEN_WIDTH * offset;
-            break;
-        }
-    }
-    
-    _lineBottom.center = CGPointMake(_lineBottom.center.x + offsetScale, _lineBottom.center.y);
-    _lineBottom.bounds = CGRectMake(0, 0, _lineBottom.frame.size.width + widthScale, LINEBOTTOM_HEIGHT);
+    _lineBottom.bounds = CGRectMake(0, 0, [self getTitlePoint:scrollView.contentOffset.x], LINEBOTTOM_HEIGHT);
     
     CGFloat page = (NSInteger)((scrollView.contentOffset.x + SCREEN_WIDTH / 2) / SCREEN_WIDTH);
     for (UIButton *button in _titleButtons) {
         if (button.tag == page) {
             [button setTitleColor:SELECTED_COLOR forState:UIControlStateNormal];
-//            [UIView animateWithDuration:0.3 animations:^{
-//                button.transform = CGAffineTransformMakeScale(1.1, 1.1);
-//            }];
+            [UIView animateWithDuration:0.3 animations:^{
+                button.transform = CGAffineTransformMakeScale(1.1, 1.1);
+            }];
         }else{
             [button setTitleColor:UNSELECTED_COLOR forState:UIControlStateNormal];
-//            [UIView animateWithDuration:0.3 animations:^{
-//                button.transform = CGAffineTransformIdentity;
-//            }];
+            [UIView animateWithDuration:0.3 animations:^{
+                button.transform = CGAffineTransformIdentity;
+            }];
         }
     }
 }

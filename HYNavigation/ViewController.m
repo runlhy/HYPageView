@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT) WithTitles:@[@"个性推介",@"歌歌歌歌",@"主播电台",@"排行榜",@"个性推介",@"歌",@"主播电台",@"排行榜"] WithViewControllers:@[@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController"]];
+    HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT) WithTitles:@[@"个性推介asdfasdf",@"歌单",@"主播电asdf台",@"排行榜",@"哦",@"欲罢不能"] WithViewControllers:@[@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController"]];
     [self.view addSubview:pageView];
     
     
