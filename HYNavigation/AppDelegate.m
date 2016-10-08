@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-
+#import "FirstViewViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -22,6 +22,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     ViewController *viewController = [[ViewController alloc] init];
+    FirstViewViewController *firstViewViewController = [FirstViewViewController new];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     

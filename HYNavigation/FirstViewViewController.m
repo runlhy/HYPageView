@@ -5,6 +5,9 @@
 //  Created by runlhy on 16/9/27.
 //  Copyright © 2016年 Pengcent. All rights reserved.
 //
+#define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
+
+#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 
 #import "FirstViewViewController.h"
 
@@ -14,25 +17,30 @@
 
 @implementation FirstViewViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)loadView{
+    [super loadView];
+    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    view.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    view.contentSize = CGSizeMake(view.bounds.size.width, 1000);
     
-    CGFloat hue = ( arc4random() % 256 / 256.0 );  //0.0 to 1.0
-    CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;  // 0.5 to 1.0,away from white
-    CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;  //0.5 to 1.0,away from black
-    
+    CGFloat hue = ( arc4random() % 256 / 256.0 );
+    CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;
+    CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;
     UIColor *randomColor = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
     
-    self.view.backgroundColor = randomColor;
-    
-    
-    
-    // Do any additional setup after loading the view.
+    UIView *redView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+    redView.backgroundColor = [UIColor redColor];
+    [view addSubview:redView];
+    view.backgroundColor = randomColor;
+    self.view = view;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 /*
