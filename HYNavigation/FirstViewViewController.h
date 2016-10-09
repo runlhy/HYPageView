@@ -10,4 +10,6 @@
 
 @interface FirstViewViewController : UIViewController
 
+@property (nonatomic, strong) id parameter;
+
 @end

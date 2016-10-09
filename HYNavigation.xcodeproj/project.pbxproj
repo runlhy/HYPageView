@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		62BEC3271D9ABB2300425976 /* HYPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 62BEC3261D9ABB2300425976 /* HYPageView.m */; };
 		62BEC32A1D9ACFCD00425976 /* FirstViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62BEC3291D9ACFCD00425976 /* FirstViewViewController.m */; };
+		62C26EC21DAAC9F1005B887E /* 奇思古粗废墟体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62C26EC11DAAC9F1005B887E /* 奇思古粗废墟体.ttf */; };
 		62E040721D99910E00D6BE9D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 62E040711D99910E00D6BE9D /* main.m */; };
 		62E040751D99910E00D6BE9D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 62E040741D99910E00D6BE9D /* AppDelegate.m */; };
 		62E040781D99910E00D6BE9D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62E040771D99910E00D6BE9D /* ViewController.m */; };
@@ -21,6 +22,7 @@
 		62BEC3261D9ABB2300425976 /* HYPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYPageView.m; sourceTree = "<group>"; };
 		62BEC3281D9ACFCD00425976 /* FirstViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewViewController.h; sourceTree = "<group>"; };
 		62BEC3291D9ACFCD00425976 /* FirstViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewViewController.m; sourceTree = "<group>"; };
+		62C26EC11DAAC9F1005B887E /* 奇思古粗废墟体.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "奇思古粗废墟体.ttf"; sourceTree = "<group>"; };
 		62E0406D1D99910E00D6BE9D /* HYNavigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYNavigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E040711D99910E00D6BE9D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		62E040731D99910E00D6BE9D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 		62E040701D99910E00D6BE9D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				62C26EC11DAAC9F1005B887E /* 奇思古粗废墟体.ttf */,
 				62E040711D99910E00D6BE9D /* main.m */,
 			);
 			name = "Supporting Files";
@@ -154,6 +157,7 @@
 			files = (
 				62E040801D99910E00D6BE9D /* LaunchScreen.storyboard in Resources */,
 				62E0407D1D99910E00D6BE9D /* Assets.xcassets in Resources */,
+				62C26EC21DAAC9F1005B887E /* 奇思古粗废墟体.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

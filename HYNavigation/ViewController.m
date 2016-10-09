@@ -27,28 +27,30 @@
 //    @[@"精选",@"片库",@"电影",@"韩剧",@"德云社",@"动漫",@"电视剧",@"纪录片"]
 //    @[@"头条",@"精选",@"新好声音"]
     
-    HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) WithTitles:@[@"个性推介",@"歌单",@"主播电台"] WithViewControllers:@[@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController"]];
-    pageView.backgroundColor = [UIColor blueColor];
+    HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"头条",@"精选",@"新好声音"] withViewControllers:@[@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController",@"FirstViewViewController"] withParameters:@[@"123",@"这是一片很寂寞的天"]];
+//    pageView.isAnimated = YES;
+    
+    pageView.selectedColor = [UIColor blueColor];
+    pageView.unselectedColor = [UIColor blackColor];
+    pageView.font = [UIFont systemFontOfSize:20];
+//    pageView.font = [UIFont fontWithName:@"奇思古粗废墟体" size:20];
+    
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setImage:[UIImage imageNamed:@"search_"] forState:UIControlStateNormal];
     button.frame = CGRectMake(0, 0, 50, 40);
-    [button setTintColor:[UIColor grayColor]];
+    [button setTintColor:[UIColor blackColor]];
     button.transform = CGAffineTransformMakeScale(.7, .7);
     pageView.leftButton = button;
     
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
     [button2 setImage:[UIImage imageNamed:@"more_"] forState:UIControlStateNormal];
+    button2.frame = CGRectMake(0, 0, 50, 40);
+    [button2 setTintColor:[UIColor blackColor]];
     button2.transform = CGAffineTransformMakeScale(.5, .5);
-    button2.bounds = CGRectMake(0, 0, 50, 40);
-    [button2 setTintColor:[UIColor grayColor]];
     pageView.rightButton = button2;
     
-    pageView.selectedColor = [UIColor redColor];
-    pageView.unselectedColor = [UIColor blackColor];
-    pageView.isTranslucent = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    
     [self.view addSubview:pageView];
     
     

@@ -29,28 +29,15 @@
     UIColor *randomColor = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
     
     UIView *redView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
-    redView.backgroundColor = [UIColor redColor];
+    redView.backgroundColor = randomColor;
     [view addSubview:redView];
-    view.backgroundColor = randomColor;
+    //view.backgroundColor = randomColor;
     self.view = view;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"%@",self.parameter);
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -10,21 +10,39 @@
 
 @interface HYPageView : UIScrollView
 
-@property (strong, nonatomic) UIColor *selectedColor;
-@property (strong, nonatomic) UIColor *unselectedColor;
-@property (strong, nonatomic) UIColor *topTabBottomLineColor;
-
+// Personalized configuration properties
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIColor *selectedColor;
+@property (nonatomic, strong) UIColor *unselectedColor;
+@property (nonatomic, strong) UIColor *topTabBottomLineColor;
+@property (nonatomic, assign) CGFloat leftSpace;
+@property (nonatomic, assign) CGFloat rightSpace;
+@property (nonatomic, assign) CGFloat minSpace;
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 
+/**
+ default NO.
+ */
+@property (nonatomic, assign) BOOL isAnimated;
+/**
+ default YES.
+ */
 @property (nonatomic, assign) BOOL isTranslucent;
 /**
- 是否平均排布按钮，只在一页可以放下所有按钮时有效
+ default YES ,Valid when only one page can be filled with all buttons
  */
 @property (nonatomic, assign) BOOL isAverage;
+/**
+ Initializes and returns a newly allocated view object with the specified frame rectangle.
+ 
+ @param frame       ...
+ @param titles      Some title
+ @param controllers Some controllers
+ @param parameters  You need to set a property called "parameter" for your controller to receive.
 
-
-//初始化方法
-- (instancetype)initWithFrame:(CGRect)frame WithTitles:(NSArray *)titles WithViewControllers:(NSArray *)childViewControllers;
+ @return self
+ */
+- (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withViewControllers:(NSArray *)controllers withParameters:(NSArray *)parameters;
 
 @end
