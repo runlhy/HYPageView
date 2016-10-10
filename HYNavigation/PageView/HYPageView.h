@@ -18,6 +18,7 @@
 @property (nonatomic, assign) CGFloat leftSpace;
 @property (nonatomic, assign) CGFloat rightSpace;
 @property (nonatomic, assign) CGFloat minSpace;
+@property (nonatomic, assign) CGFloat topSpace;
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 

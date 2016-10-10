@@ -53,6 +53,10 @@
     
     UIViewController *_viewController;
 }
+- (void)dealloc{
+    [self removeObserver:self forKeyPath:@"currentPage"];
+}
+
 - (void)setSelectedColor:(UIColor *)selectedColor{
     _selectedColor              = selectedColor;
     __selectedColor             = selectedColor;
@@ -79,6 +83,11 @@
     _minSpace  = minSpace;
     __minSpace = minSpace;
 }
+- (void)setTopSpace:(CGFloat)topSpace{
+    _topSpace = topSpace;
+    __topSpace = topSpace;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withViewControllers:(NSArray *)controllers withParameters:(NSArray *)parameters{
     self = [super initWithFrame:frame];
     if (self) {
@@ -101,21 +110,23 @@
 - (void)layoutSubviews{
     
     [super layoutSubviews];
-    _viewController = [self viewController];
-    if (_viewController.navigationController) {
+    _viewController = [self findViewController:self];
+    if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden) {
         __topSpace = 0;
     }
     _font = _font?_font:[UIFont systemFontOfSize:16];
     [self addSubview:self.scrollView];
     [self addSubview:self.topTabView];
     [self addSubview:self.topTabScrollView];
-    [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
-    self.currentPage = 0;
+    
 }
 - (UIView *)topTabView{
     if (!_topTabView){
-        
-        CGRect frame = CGRectMake(0, 0, _selfFrame.size.width, TAB_HEIGHT + __topSpace);
+        CGFloat y = 0;
+        if (_viewController.navigationController && _viewController.navigationController.navigationBar.hidden){
+            y = -20;
+        }
+        CGRect frame = CGRectMake(0, y, _selfFrame.size.width, TAB_HEIGHT + __topSpace);
         _topTabView  = [[UIView alloc] initWithFrame:frame];
         if (_isTranslucent) {
             UIToolbar *backView = [[UIToolbar alloc] initWithFrame:_topTabView.bounds];
@@ -150,7 +161,7 @@
             rightWidth = self.rightButton.bounds.size.width;
         }
         _topTabScrollViewWidth = _selfFrame.size.width - leftWidth - rightWidth;
-        CGRect frame = CGRectMake(leftWidth, __topSpace, _topTabScrollViewWidth, TAB_HEIGHT);
+        CGRect frame = CGRectMake(leftWidth, __topSpace + _topTabView.frame.origin.y, _topTabScrollViewWidth, TAB_HEIGHT);
         _topTabScrollView = [[UIScrollView alloc] initWithFrame:frame];
         _topTabScrollView.showsHorizontalScrollIndicator = NO;
         _topTabScrollView.alwaysBounceHorizontal = YES;
@@ -239,10 +250,14 @@
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
+        
         CGFloat y = 0;
-        if (_viewController.navigationController) {
+        if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden) {
             y = -64;
+        }else if (_viewController.navigationController && _viewController.navigationController.navigationBar.hidden){
+            y = -20;
         }
+        
         _scrollView.frame = CGRectMake(0, y, _selfFrame.size.width, _selfFrame.size.height);
         _scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         _scrollView.delegate = self;
@@ -250,6 +265,8 @@
         _scrollView.contentSize = CGSizeMake(_selfFrame.size.width * _titles.count, 0);
         _scrollView.pagingEnabled = YES;
         _scrollView.showsHorizontalScrollIndicator = YES;
+        [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
+        self.currentPage = 0;
     }
     return _scrollView;
 }
@@ -304,15 +321,19 @@
         }
     }
 }
-- (UIViewController *)viewController {
-    for (UIView* next = [self superview]; next; next = next.superview) {
-        UIResponder *nextResponder = [next nextResponder];
-        if ([nextResponder isKindOfClass:[UIViewController class]]) {
-            return (UIViewController *)nextResponder;
+
+- (UIViewController *)findViewController:(UIView *)sourceView
+{
+    id target = sourceView;
+    while (target) {
+        target = ((UIResponder *)target).nextResponder;
+        if ([target isKindOfClass:[UIViewController class]]) {
+            break;
         }
     }
-    return nil;
+    return target;
 }
+
 #pragma mark - KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
     if ([keyPath isEqualToString:@"currentPage"]) {
@@ -340,9 +361,10 @@
                 UIScrollView *view = (UIScrollView *)viewController.view;
                 view.frame = CGRectMake(_selfFrame.size.width * i, 0, _selfFrame.size.width, _scrollView.bounds.size.height);
                 CGFloat offset = __topSpace + TAB_HEIGHT;
-                if (_viewController.navigationController) {
+                if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden) {
                     offset += 64;
                 }
+                
                 if ([view.class isSubclassOfClass:[UIScrollView class]]) {
                     view.contentInset = UIEdgeInsetsMake(offset, 0, 0, 0);
                     view.contentOffset = CGPointMake(0,-offset);
