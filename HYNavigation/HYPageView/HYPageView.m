@@ -19,10 +19,11 @@
 #import <objc/runtime.h>
 @interface HYPageView () <UIScrollViewDelegate>
 
-@property (strong, nonatomic) UIView       *topTabView;
-@property (strong, nonatomic) UIScrollView *topTabScrollView;
-@property (strong, nonatomic) UIScrollView *scrollView;
-@property (assign, nonatomic) NSInteger    currentPage;
+@property (strong, nonatomic) UIView         *topTabView;
+@property (strong, nonatomic) UIScrollView   *topTabScrollView;
+@property (strong, nonatomic) UIScrollView   *scrollView;
+@property (assign, nonatomic) NSInteger      currentPage;
+@property (strong, nonatomic) NSMutableArray *strongArray;
 
 @end
 
@@ -111,7 +112,7 @@
     
     [super layoutSubviews];
     _viewController = [self findViewController:self];
-    if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden) {
+    if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden) {
         __topSpace = 0;
     }
     _font = _font?_font:[UIFont systemFontOfSize:16];
@@ -120,10 +121,19 @@
     [self addSubview:self.topTabScrollView];
     
 }
+
+- (NSMutableArray *)strongArray
+{
+    if (!_strongArray){
+        _strongArray = [NSMutableArray array];
+    }
+    return _strongArray;
+}
+
 - (UIView *)topTabView{
     if (!_topTabView){
         CGFloat y = 0;
-        if (_viewController.navigationController && _viewController.navigationController.navigationBar.hidden){
+        if (_viewController.navigationController && (_viewController.navigationController.navigationBar.hidden || _viewController.navigationController.navigationBarHidden)){
             y = -20;
         }
         CGRect frame = CGRectMake(0, y, _selfFrame.size.width, TAB_HEIGHT + __topSpace);
@@ -150,6 +160,7 @@
     }
     return _topTabView;
 }
+
 - (UIScrollView *)topTabScrollView{
     if (!_topTabScrollView){
         CGFloat leftWidth  = 0;
@@ -247,19 +258,19 @@
     }
     return _topTabScrollView;
 }
+
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
         
         CGFloat y = 0;
-        if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden) {
+        if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden) {
             y = -64;
-        }else if (_viewController.navigationController && _viewController.navigationController.navigationBar.hidden){
+        }else if (_viewController.navigationController && (_viewController.navigationController.navigationBar.hidden || _viewController.navigationController.navigationBarHidden)){
             y = -20;
         }
         
         _scrollView.frame = CGRectMake(0, y, _selfFrame.size.width, _selfFrame.size.height);
-        _scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         _scrollView.delegate = self;
         _scrollView.backgroundColor = [UIColor whiteColor];
         _scrollView.contentSize = CGSizeMake(_selfFrame.size.width * _titles.count, 0);
@@ -270,6 +281,7 @@
     }
     return _scrollView;
 }
+
 - (CGFloat)getTitleWidth:(CGFloat)offset{
     NSInteger index = (NSInteger)(offset / _selfFrame.size.width);
     CGFloat k = [_width_k_array[index] floatValue];
@@ -354,22 +366,37 @@
                     return;
                 }
                 Class class = NSClassFromString(className);
+                
                 UIViewController *viewController = class.new;
+                [self.strongArray addObject:viewController];
                 if (_parameters && _parameters.count > i && _parameters[i] && [self getVariableWithClass:viewController.class varName:@"parameter"]) {
                     [viewController setValue:_parameters[i] forKey:@"parameter"];
                 }
-                UIScrollView *view = (UIScrollView *)viewController.view;
-                view.frame = CGRectMake(_selfFrame.size.width * i, 0, _selfFrame.size.width, _scrollView.bounds.size.height);
+                
+                
+                
                 CGFloat offset = __topSpace + TAB_HEIGHT;
-                if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden) {
+                if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden) {
                     offset += 64;
                 }
-                
-                if ([view.class isSubclassOfClass:[UIScrollView class]]) {
+                CGRect frame = CGRectMake(_selfFrame.size.width * i, offset, _selfFrame.size.width, _scrollView.bounds.size.height - offset);
+
+                if ([viewController.view.class isSubclassOfClass:[UIScrollView class]]) {
+                    UIScrollView *view = (UIScrollView *)viewController.view;
                     view.contentInset = UIEdgeInsetsMake(offset, 0, 0, 0);
                     view.contentOffset = CGPointMake(0,-offset);
+                    
+                    frame = CGRectMake(_selfFrame.size.width * i, 0, _selfFrame.size.width, _scrollView.bounds.size.height);
                 }
-                [_scrollView addSubview:viewController.view];
+                if ([NSStringFromClass([viewController.view class]) isEqualToString:@"UICollectionViewControllerWrapperView"]) {
+                    UIScrollView *view = (UIScrollView *)viewController.view.subviews[0];
+                    view.contentInset = UIEdgeInsetsMake(offset, 0, 0, 0);
+                    view.contentOffset = CGPointMake(0,-offset);
+                    frame = CGRectMake(_selfFrame.size.width * i, 0, _selfFrame.size.width, _scrollView.bounds.size.height);
+                }
+                
+                viewController.view.frame = frame;
+                [self.scrollView addSubview:viewController.view];
                 _viewControllers[page] = @"HYPAGEVIEW_AlreadyCreated";
             }
         }

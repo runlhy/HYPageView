@@ -17,25 +17,6 @@
 
 @implementation FirstViewViewController
 
-//- (void)loadView{
-//    [super loadView];
-//    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-//    view.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-//    view.contentSize = CGSizeMake(view.bounds.size.width, 1000);
-//    
-//    CGFloat hue = ( arc4random() % 256 / 256.0 );
-//    CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;
-//    CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;
-//    UIColor *randomColor = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
-//    
-//    UIView *redView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
-//    redView.backgroundColor = randomColor;
-//    [view addSubview:redView];
-//    
-//    
-//    self.view = view;
-//}
-
 - (UIViewController *)getPresentedViewController
 {
     UIViewController *appRootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -47,21 +28,18 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(100, 100, 50, 50);
+    button.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
     [button addTarget:self action:@selector(dismisVC:) forControlEvents:UIControlEventTouchUpInside];
-    button.backgroundColor = [UIColor redColor];
-    [button setTitle:@"dismis" forState:UIControlStateNormal];
+    button.backgroundColor = [UIColor cyanColor];
+    [button setTitle:@"disappear😛" forState:UIControlStateNormal];
     [self.view addSubview:button];
     
-    NSLog(@"%@",self.parameter);
+    [super viewDidLoad];
 }
 - (void)dismisVC:(UIButton *)button{
-    NSLog(@"%@",[self getPresentedViewController]);
-    
     [[self getPresentedViewController] dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 @end
