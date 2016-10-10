@@ -88,15 +88,15 @@
     
     pageView.selectedColor = [UIColor redColor];
     pageView.unselectedColor = [UIColor blackColor];
-    pageView.font = [UIFont fontWithName:@"奇思古粗废墟体" size:18];
+    pageView.font = [UIFont fontWithName:@"Zapfino" size:16];
     return pageView;
 }
 - (HYPageView *)test4 {
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"我实在",@"也",@"想不出",@"头上",@"写",@"点啥了"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
-    
+    pageView.isAnimated = YES;
     pageView.selectedColor = [UIColor blueColor];
     pageView.unselectedColor = [UIColor blackColor];
-    pageView.font = [UIFont fontWithName:@"奇思古粗废墟体" size:18];
+    pageView.font = [UIFont fontWithName:@"HoeflerText-Black" size:18];
     return pageView;
 }
 - (void)viewWillAppear:(BOOL)animated{

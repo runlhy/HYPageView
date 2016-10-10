@@ -36,7 +36,6 @@
 		629CE0211DABC17400DE0D28 /* WaterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 629CE01F1DABC17400DE0D28 /* WaterFlowLayout.m */; };
 		629CE0251DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 629CE0231DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.m */; };
 		629CE0261DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 629CE0241DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.xib */; };
-		62C26EC21DAAC9F1005B887E /* 奇思古粗废墟体.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62C26EC11DAAC9F1005B887E /* 奇思古粗废墟体.ttf */; };
 		62E040721D99910E00D6BE9D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 62E040711D99910E00D6BE9D /* main.m */; };
 		62E0407D1D99910E00D6BE9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62E0407C1D99910E00D6BE9D /* Assets.xcassets */; };
 		62E040801D99910E00D6BE9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62E0407E1D99910E00D6BE9D /* LaunchScreen.storyboard */; };
@@ -98,7 +97,6 @@
 		629CE0221DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterFlowCollectionViewCell.h; sourceTree = "<group>"; };
 		629CE0231DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaterFlowCollectionViewCell.m; sourceTree = "<group>"; };
 		629CE0241DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WaterFlowCollectionViewCell.xib; sourceTree = "<group>"; };
-		62C26EC11DAAC9F1005B887E /* 奇思古粗废墟体.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "奇思古粗废墟体.ttf"; sourceTree = "<group>"; };
 		62E0406D1D99910E00D6BE9D /* HYNavigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYNavigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E040711D99910E00D6BE9D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		62E0407C1D99910E00D6BE9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -284,7 +282,6 @@
 				62E0407C1D99910E00D6BE9D /* Assets.xcassets */,
 				62E0407E1D99910E00D6BE9D /* LaunchScreen.storyboard */,
 				62E040811D99910E00D6BE9D /* Info.plist */,
-				62C26EC11DAAC9F1005B887E /* 奇思古粗废墟体.ttf */,
 				62E040711D99910E00D6BE9D /* main.m */,
 			);
 			name = "Supporting Files";
@@ -351,7 +348,6 @@
 				62E040801D99910E00D6BE9D /* LaunchScreen.storyboard in Resources */,
 				62E0407D1D99910E00D6BE9D /* Assets.xcassets in Resources */,
 				629CE0261DABC1AB00DE0D28 /* WaterFlowCollectionViewCell.xib in Resources */,
-				62C26EC21DAAC9F1005B887E /* 奇思古粗废墟体.ttf in Resources */,
 				629CE00B1DABBDDF00DE0D28 /* x.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
