@@ -151,7 +151,7 @@
             backView.barStyle   = UIBarStyleDefault;
             [_topTabView addSubview:backView];
         }else{
-            _topTabView.backgroundColor = [UIColor greenColor];
+            _topTabView.backgroundColor = [UIColor whiteColor];
         }
         if (self.leftButton) {
             self.leftButton.center = CGPointMake(self.leftButton.bounds.size.width / 2, TAB_HEIGHT / 2 + __topSpace);

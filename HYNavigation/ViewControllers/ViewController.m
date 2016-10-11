@@ -58,7 +58,6 @@
     [rightButton setTintColor:[UIColor blackColor]];
     rightButton.transform = CGAffineTransformMakeScale(.5, .5);
     pageView.rightButton = rightButton;
-    
     return pageView;
 }
 
@@ -77,7 +76,8 @@
 
 - (HYPageView *)test2 {
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"个性推介",@"歌单",@"主播电台",@"排行榜"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
-    pageView.backgroundColor = [UIColor blueColor];
+    pageView.isTranslucent = NO;
+    
     pageView.selectedColor = [UIColor redColor];
     pageView.unselectedColor = [UIColor blackColor];
     

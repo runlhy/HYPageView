@@ -22,8 +22,10 @@
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 
+/**
+ default YES.
+ */
 @property (nonatomic, assign) BOOL isAdapteNavigationBar;
-
 /**
  default NO.
  */
@@ -41,7 +43,7 @@
  
  @param frame       ...
  @param titles      Some title
- @param controllers Some controllers
+ @param controllers Name of some controllers
  @param parameters  You need to set a property called "parameter" for your controller to receive.
 
  @return self
