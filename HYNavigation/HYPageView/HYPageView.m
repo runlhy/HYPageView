@@ -54,9 +54,12 @@
     
     UIViewController *_viewController;
 }
+
 - (void)dealloc{
     [self removeObserver:self forKeyPath:@"currentPage"];
 }
+
+#pragma mark - set Method
 
 - (void)setSelectedColor:(UIColor *)selectedColor{
     _selectedColor              = selectedColor;
@@ -64,50 +67,59 @@
     _lineBottom.backgroundColor = selectedColor;
     [self updateSelectedPage:0];
 }
+
 - (void)setUnselectedColor:(UIColor *)unselectedColor{
     _unselectedColor    = unselectedColor;
     __unselectedColor   = unselectedColor;
     [self updateSelectedPage:0];
 }
+
 - (void)setTopTabBottomLineColor:(UIColor *)topTabBottomLineColor{
     _topTabBottomLineColor = topTabBottomLineColor;
 }
+
 - (void)setLeftSpace:(CGFloat)leftSpace{
     _leftSpace  = leftSpace;
     __leftSpace = leftSpace;
 }
+
 - (void)setRightSpace:(CGFloat)rightSpace{
     _rightSpace  = rightSpace;
     __rightSpace = rightSpace;
 }
+
 - (void)setMinSpace:(CGFloat)minSpace{
     _minSpace  = minSpace;
     __minSpace = minSpace;
 }
+
 - (void)setTopSpace:(CGFloat)topSpace{
     _topSpace = topSpace;
     __topSpace = topSpace;
 }
 
+#pragma mark - Initializes Method
 - (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withViewControllers:(NSArray *)controllers withParameters:(NSArray *)parameters{
     self = [super initWithFrame:frame];
     if (self) {
-        _selfFrame        = frame;
-        __selectedColor   = SELECTED_COLOR;
-        __unselectedColor = UNSELECTED_COLOR;
-        __leftSpace       = LEFT_SPACE;
-        __rightSpace      = RIGHT_SPACE;
-        __minSpace        = MIN_SPACING;
-        _titles           = titles;
-        _viewControllers  = [NSMutableArray arrayWithArray:controllers];
-        _parameters       = parameters;
-        __topSpace        = 20;
-        _isAverage        = YES;
-        _isTranslucent    = YES;
-        _isAnimated       = NO;
+        _selfFrame             = frame;
+        __selectedColor        = SELECTED_COLOR;
+        __unselectedColor      = UNSELECTED_COLOR;
+        __leftSpace            = LEFT_SPACE;
+        __rightSpace           = RIGHT_SPACE;
+        __minSpace             = MIN_SPACING;
+        _titles                = titles;
+        _viewControllers       = [NSMutableArray arrayWithArray:controllers];
+        _parameters            = parameters;
+        __topSpace             = 20;
+        _isAverage             = YES;
+        _isTranslucent         = YES;
+        _isAnimated            = NO;
+        _isAdapteNavigationBar = YES;
     }
     return self;
 }
+
 - (void)layoutSubviews{
     
     [super layoutSubviews];
@@ -122,19 +134,15 @@
     
 }
 
-- (NSMutableArray *)strongArray
-{
-    if (!_strongArray){
-        _strongArray = [NSMutableArray array];
-    }
-    return _strongArray;
-}
-
+#pragma mark - lazy
 - (UIView *)topTabView{
     if (!_topTabView){
         CGFloat y = 0;
         if (_viewController.navigationController && (_viewController.navigationController.navigationBar.hidden || _viewController.navigationController.navigationBarHidden)){
             y = -20;
+        }
+        if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden && !_isAdapteNavigationBar) {
+            y = -64;
         }
         CGRect frame = CGRectMake(0, y, _selfFrame.size.width, TAB_HEIGHT + __topSpace);
         _topTabView  = [[UIView alloc] initWithFrame:frame];
@@ -282,6 +290,15 @@
     return _scrollView;
 }
 
+- (NSMutableArray *)strongArray{
+    if (!_strongArray){
+        _strongArray = [NSMutableArray array];
+    }
+    return _strongArray;
+}
+
+#pragma mark - Calculation Method
+
 - (CGFloat)getTitleWidth:(CGFloat)offset{
     NSInteger index = (NSInteger)(offset / _selfFrame.size.width);
     CGFloat k = [_width_k_array[index] floatValue];
@@ -289,6 +306,7 @@
     CGFloat x = offset;
     return  k * x + b;
 }
+
 - (CGFloat)getTitlePoint:(CGFloat)offset{
     NSInteger index = (NSInteger)(offset / _selfFrame.size.width);
     CGFloat k = [_point_k_array[index] floatValue];
@@ -296,15 +314,13 @@
     CGFloat x = offset;
     return  k * x + b;
 }
-- (void)touchAction:(UIButton *)button {
-    [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * button.tag, 0) animated:YES];
-    self.currentPage = (_selfFrame.size.width * button.tag + _selfFrame.size.width / 2) / _selfFrame.size.width;
-    
-}
+
 #pragma mark - UIScrollViewDelegate
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     self.currentPage = (NSInteger)((scrollView.contentOffset.x + _selfFrame.size.width / 2) / _selfFrame.size.width);
 }
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.x<=0 || scrollView.contentOffset.x >= _selfFrame.size.width * (_titles.count-1)) {
         return;
@@ -314,6 +330,15 @@
     CGFloat page = (NSInteger)((scrollView.contentOffset.x + _selfFrame.size.width / 2) / _selfFrame.size.width);
     [self updateSelectedPage:page];
 }
+
+#pragma mark - My Method
+
+- (void)touchAction:(UIButton *)button {
+    [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * button.tag, 0) animated:YES];
+    self.currentPage = (_selfFrame.size.width * button.tag + _selfFrame.size.width / 2) / _selfFrame.size.width;
+    
+}
+
 - (void)updateSelectedPage:(NSInteger)page{
     for (UIButton *button in _titleButtons) {
         if (button.tag == page) {
@@ -346,6 +371,20 @@
     return target;
 }
 
+- (BOOL)getVariableWithClass:(Class)myClass varName:(NSString *)name{
+    unsigned int outCount, i;
+    Ivar *ivars = class_copyIvarList(myClass, &outCount);
+    for (i = 0; i < outCount; i++) {
+        Ivar property = ivars[i];
+        NSString *keyName = [NSString stringWithCString:ivar_getName(property) encoding:NSUTF8StringEncoding];
+        keyName = [keyName stringByReplacingOccurrencesOfString:@"_" withString:@""];
+        if ([keyName isEqualToString:name]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 #pragma mark - KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
     if ([keyPath isEqualToString:@"currentPage"]) {
@@ -376,7 +415,7 @@
                 
                 
                 CGFloat offset = __topSpace + TAB_HEIGHT;
-                if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden) {
+                if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden && _isAdapteNavigationBar) {
                     offset += 64;
                 }
                 CGRect frame = CGRectMake(_selfFrame.size.width * i, offset, _selfFrame.size.width, _scrollView.bounds.size.height - offset);
@@ -385,7 +424,6 @@
                     UIScrollView *view = (UIScrollView *)viewController.view;
                     view.contentInset = UIEdgeInsetsMake(offset, 0, 0, 0);
                     view.contentOffset = CGPointMake(0,-offset);
-                    
                     frame = CGRectMake(_selfFrame.size.width * i, 0, _selfFrame.size.width, _scrollView.bounds.size.height);
                 }
                 if ([NSStringFromClass([viewController.view class]) isEqualToString:@"UICollectionViewControllerWrapperView"]) {
@@ -394,7 +432,6 @@
                     view.contentOffset = CGPointMake(0,-offset);
                     frame = CGRectMake(_selfFrame.size.width * i, 0, _selfFrame.size.width, _scrollView.bounds.size.height);
                 }
-                
                 viewController.view.frame = frame;
                 [self.scrollView addSubview:viewController.view];
                 _viewControllers[page] = @"HYPAGEVIEW_AlreadyCreated";
@@ -402,18 +439,7 @@
         }
     }
 }
-- (BOOL)getVariableWithClass:(Class)myClass varName:(NSString *)name{
-    unsigned int outCount, i;
-    Ivar *ivars = class_copyIvarList(myClass, &outCount);
-    for (i = 0; i < outCount; i++) {
-        Ivar property = ivars[i];
-        NSString *keyName = [NSString stringWithCString:ivar_getName(property) encoding:NSUTF8StringEncoding];
-        keyName = [keyName stringByReplacingOccurrencesOfString:@"_" withString:@""];
-        if ([keyName isEqualToString:name]) {
-            return YES;
-        }
-    }
-    return NO;
-}
+
+
 
 @end

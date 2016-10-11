@@ -66,6 +66,7 @@
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"精选",@"片库",@"电影",@"韩剧",@"德云社",@"动漫",@"电视剧",@"纪录片"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [leftButton setImage:[UIImage imageNamed:@"search_"] forState:UIControlStateNormal];
+    pageView.isAdapteNavigationBar = NO;
     leftButton.frame = CGRectMake(0, 0, 50, 40);
     [leftButton setTintColor:[UIColor blackColor]];
     leftButton.transform = CGAffineTransformMakeScale(.7, .7);
@@ -76,7 +77,7 @@
 
 - (HYPageView *)test2 {
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"个性推介",@"歌单",@"主播电台",@"排行榜"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
-    
+    pageView.backgroundColor = [UIColor blueColor];
     pageView.selectedColor = [UIColor redColor];
     pageView.unselectedColor = [UIColor blackColor];
     
@@ -152,7 +153,6 @@
         {
             UIViewController *v = [UIViewController new];
             UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:v];
-
             [v.view addSubview:[self test2]];
             [self showViewController:nv sender:nil];
         }
@@ -171,7 +171,6 @@
             UIViewController *v = [UIViewController new];
             [v.view addSubview:[self test4]];
             [self showViewController:v sender:nil];
-            
         }
             break;
     }

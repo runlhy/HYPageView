@@ -22,6 +22,8 @@
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
 
+@property (nonatomic, assign) BOOL isAdapteNavigationBar;
+
 /**
  default NO.
  */

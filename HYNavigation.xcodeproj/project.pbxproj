@@ -247,8 +247,6 @@
 		62E040641D99910E00D6BE9D = {
 			isa = PBXGroup;
 			children = (
-				629CE0191DABC06300DE0D28 /* libz.1.1.3.tbd */,
-				629CE0171DABBF9300DE0D28 /* libsqlite3.0.tbd */,
 				62E0406F1D99910E00D6BE9D /* HYNavigation */,
 				62E0406E1D99910E00D6BE9D /* Products */,
 			);
@@ -265,10 +263,10 @@
 		62E0406F1D99910E00D6BE9D /* HYNavigation */ = {
 			isa = PBXGroup;
 			children = (
-				629CE0111DABBF3300DE0D28 /* HYPageView */,
+				629CDFFF1DABBDBA00DE0D28 /* AppDelegate */,
 				629CE00C1DABBE0000DE0D28 /* Views */,
 				629CE0031DABBDC000DE0D28 /* ViewControllers */,
-				629CDFFF1DABBDBA00DE0D28 /* AppDelegate */,
+				629CE0111DABBF3300DE0D28 /* HYPageView */,
 				629CDFBF1DABBD5300DE0D28 /* Vendors */,
 				62E040701D99910E00D6BE9D /* Supporting Files */,
 			);
@@ -278,6 +276,8 @@
 		62E040701D99910E00D6BE9D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				629CE0191DABC06300DE0D28 /* libz.1.1.3.tbd */,
+				629CE0171DABBF9300DE0D28 /* libsqlite3.0.tbd */,
 				629CE00A1DABBDDF00DE0D28 /* x.txt */,
 				62E0407C1D99910E00D6BE9D /* Assets.xcassets */,
 				62E0407E1D99910E00D6BE9D /* LaunchScreen.storyboard */,
