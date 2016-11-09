@@ -24,6 +24,7 @@
 @property (strong, nonatomic) UIScrollView   *scrollView;
 @property (assign, nonatomic) NSInteger      currentPage;
 @property (strong, nonatomic) NSMutableArray *strongArray;
+@property (weak, nonatomic) UIViewController *viewController;
 
 @end
 
@@ -52,10 +53,11 @@
     CGFloat __rightSpace;
     CGFloat __minSpace;
     
-    UIViewController *_viewController;
+
 }
 
 - (void)dealloc{
+    NSLog(@"%@",self.class);
     [self removeObserver:self forKeyPath:@"currentPage"];
 }
 
