@@ -381,9 +381,11 @@
         NSString *keyName = [NSString stringWithCString:ivar_getName(property) encoding:NSUTF8StringEncoding];
         keyName = [keyName stringByReplacingOccurrencesOfString:@"_" withString:@""];
         if ([keyName isEqualToString:name]) {
+            free(ivars);
             return YES;
         }
     }
+    free(ivars);
     return NO;
 }
 
