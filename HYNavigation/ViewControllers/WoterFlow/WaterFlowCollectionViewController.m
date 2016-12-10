@@ -23,6 +23,10 @@
 
 @implementation WaterFlowCollectionViewController
 
+-(void)dealloc{
+    NSLog(@"%@",self.class);
+}
+
 - (NSMutableArray *)randomDataArray
 {
     if (!_randomDataArray){
@@ -86,6 +90,10 @@
     NSURL *url = [NSURL URLWithString:self.randomDataArray[indexPath.row]];
     [cell.imgView yy_setImageWithURL:url options:YYWebImageOptionProgressive];
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [self.navigationController pushViewController:[WaterFlowCollectionViewController new] animated:YES];
 }
 
 @end

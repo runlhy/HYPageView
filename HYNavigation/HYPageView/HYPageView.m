@@ -103,7 +103,9 @@
 #pragma mark - Initializes Method
 - (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withViewControllers:(NSArray *)controllers withParameters:(NSArray *)parameters{
     self = [super initWithFrame:frame];
+    
     if (self) {
+        self.scrollsToTop      = NO;
         _selfFrame             = frame;
         __selectedColor        = SELECTED_COLOR;
         __unselectedColor      = UNSELECTED_COLOR;
@@ -186,6 +188,7 @@
         _topTabScrollView = [[UIScrollView alloc] initWithFrame:frame];
         _topTabScrollView.showsHorizontalScrollIndicator = NO;
         _topTabScrollView.alwaysBounceHorizontal = YES;
+        _topTabScrollView.scrollsToTop = NO;
         
         CGFloat totalWidth = 0;
         _titleSizeArray    = [NSMutableArray array];
@@ -272,6 +275,7 @@
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
+        _scrollView.scrollsToTop = NO;
         
         CGFloat y = 0;
         if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden) {
@@ -294,7 +298,7 @@
 
 - (NSMutableArray *)strongArray{
     if (!_strongArray){
-        _strongArray = [NSMutableArray array];
+        _strongArray = [NSMutableArray arrayWithArray:_viewControllers];
     }
     return _strongArray;
 }
@@ -411,12 +415,25 @@
                 Class class = NSClassFromString(className);
                 
                 UIViewController *viewController = class.new;
-                [self.strongArray addObject:viewController];
+                self.strongArray[i] = viewController;
+                for (NSInteger j=0; j<self.strongArray.count; j++) {
+                    id obj = self.strongArray[j];
+                    if ([[obj class] isSubclassOfClass:[UIViewController class]]) {
+                        UIViewController *viewController = obj;
+                        if ([viewController.view.class isSubclassOfClass:[UIScrollView class]]) {
+                            UIScrollView *view = (UIScrollView *)viewController.view;
+                            if (j == page) {
+                                view.scrollsToTop = YES;
+                            }else{
+                                view.scrollsToTop = NO;
+                            }
+                        }
+                    }
+                }
+                
                 if (_parameters && _parameters.count > i && _parameters[i] && [self getVariableWithClass:viewController.class varName:@"parameter"]) {
                     [viewController setValue:_parameters[i] forKey:@"parameter"];
                 }
-                
-                
                 
                 CGFloat offset = __topSpace + TAB_HEIGHT;
                 if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden && _isAdapteNavigationBar) {
@@ -439,6 +456,8 @@
                 viewController.view.frame = frame;
                 [self.scrollView addSubview:viewController.view];
                 _viewControllers[page] = @"HYPAGEVIEW_AlreadyCreated";
+                
+                [_viewController addChildViewController:viewController];
             }
         }
     }
