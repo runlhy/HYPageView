@@ -93,7 +93,10 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    [self.navigationController pushViewController:[WaterFlowCollectionViewController new] animated:YES];
+    if (self.navigationController) {
+        [self.navigationController pushViewController:[WaterFlowCollectionViewController new] animated:YES];
+    }
+    
 }
 
 @end

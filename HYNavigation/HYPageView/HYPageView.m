@@ -408,14 +408,7 @@
         for (NSInteger i=0; i<_viewControllers.count; i++) {
             if (page == i) {
                 NSString *className = _viewControllers[page];
-                //Create only once
-                if ([className isEqualToString:@"HYPAGEVIEW_AlreadyCreated"]) {
-                    return;
-                }
-                Class class = NSClassFromString(className);
                 
-                UIViewController *viewController = class.new;
-                self.strongArray[i] = viewController;
                 for (NSInteger j=0; j<self.strongArray.count; j++) {
                     id obj = self.strongArray[j];
                     if ([[obj class] isSubclassOfClass:[UIViewController class]]) {
@@ -430,6 +423,15 @@
                         }
                     }
                 }
+                
+                //Create only once
+                if ([className isEqualToString:@"HYPAGEVIEW_AlreadyCreated"]) {
+                    return;
+                }
+                Class class = NSClassFromString(className);
+                
+                UIViewController *viewController = class.new;
+                self.strongArray[i] = viewController;
                 
                 if (_parameters && _parameters.count > i && _parameters[i] && [self getVariableWithClass:viewController.class varName:@"parameter"]) {
                     [viewController setValue:_parameters[i] forKey:@"parameter"];
