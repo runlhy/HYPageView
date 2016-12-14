@@ -18,6 +18,10 @@
 @property (nonatomic, assign) CGFloat leftSpace;
 @property (nonatomic, assign) CGFloat rightSpace;
 @property (nonatomic, assign) CGFloat minSpace;
+/**
+ default 20.
+ For translucent status bar
+ */
 @property (nonatomic, assign) CGFloat topSpace;
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
@@ -45,7 +49,7 @@
  @param titles      Some title
  @param controllers Name of some controllers
  @param parameters  You need to set a property called "parameter" for your controller to receive.
-
+ 
  @return self
  */
 - (instancetype)initWithFrame:(CGRect)frame withTitles:(NSArray *)titles withViewControllers:(NSArray *)controllers withParameters:(NSArray *)parameters;
