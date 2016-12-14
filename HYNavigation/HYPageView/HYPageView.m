@@ -52,8 +52,6 @@
     CGFloat __leftSpace;
     CGFloat __rightSpace;
     CGFloat __minSpace;
-    
-
 }
 
 - (void)dealloc{
@@ -327,6 +325,10 @@
     self.currentPage = (NSInteger)((scrollView.contentOffset.x + _selfFrame.size.width / 2) / _selfFrame.size.width);
 }
 
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+    self.currentPage = (NSInteger)((scrollView.contentOffset.x + _selfFrame.size.width / 2) / _selfFrame.size.width);
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.x<=0 || scrollView.contentOffset.x >= _selfFrame.size.width * (_titles.count-1)) {
         return;
@@ -341,8 +343,6 @@
 
 - (void)touchAction:(UIButton *)button {
     [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * button.tag, 0) animated:YES];
-    self.currentPage = (_selfFrame.size.width * button.tag + _selfFrame.size.width / 2) / _selfFrame.size.width;
-    
 }
 
 - (void)updateSelectedPage:(NSInteger)page{
@@ -360,7 +360,7 @@
                 [UIView animateWithDuration:0.3 animations:^{
                     button.transform = CGAffineTransformIdentity;
                 }];
-            }   
+            }
         }
     }
 }
@@ -421,6 +421,14 @@
                                 view.scrollsToTop = NO;
                             }
                         }
+                        if ([NSStringFromClass([viewController.view class]) isEqualToString:@"UICollectionViewControllerWrapperView"]) {
+                            UIScrollView *view = (UIScrollView *)viewController.view.subviews[0];
+                            if (j == page) {
+                                view.scrollsToTop = YES;
+                            }else{
+                                view.scrollsToTop = NO;
+                            }
+                        }
                     }
                 }
                 
@@ -442,7 +450,7 @@
                     offset += 64;
                 }
                 CGRect frame = CGRectMake(_selfFrame.size.width * i, offset, _selfFrame.size.width, _scrollView.bounds.size.height - offset);
-
+                
                 if ([viewController.view.class isSubclassOfClass:[UIScrollView class]]) {
                     UIScrollView *view = (UIScrollView *)viewController.view;
                     view.contentInset = UIEdgeInsetsMake(offset, 0, 0, 0);
@@ -464,7 +472,5 @@
         }
     }
 }
-
-
 
 @end
