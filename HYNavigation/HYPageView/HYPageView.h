@@ -18,6 +18,7 @@
 @property (nonatomic, assign) CGFloat leftSpace;
 @property (nonatomic, assign) CGFloat rightSpace;
 @property (nonatomic, assign) CGFloat minSpace;
+@property (nonatomic, assign) NSInteger defaultSubscript;
 /**
  default 20.
  For translucent status bar

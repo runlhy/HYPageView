@@ -48,7 +48,7 @@
 }
 
 - (void)dealloc{
-    NSLog(@"%@",self.class);
+    //NSLog(@"%@",self.class);
     [self removeObserver:self forKeyPath:@"currentPage"];
 }
 
@@ -223,15 +223,16 @@
             [_topTabScrollView addSubview:titleButton];
             [titleButton addTarget:self action:@selector(touchAction:) forControlEvents:UIControlEventTouchUpInside];
         }
-        [self updateSelectedPage:0];
+        [self updateSelectedPage:self.defaultSubscript];
+        [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * self.defaultSubscript, 0) animated:NO];
         
         UIView *topTabBottomLine = [UIView new];
         topTabBottomLine.frame = CGRectMake(-totalWidth, TAB_HEIGHT - TOPBOTTOMLINEBOTTOM_HEIGHT, totalWidth*3, TOPBOTTOMLINEBOTTOM_HEIGHT);
         topTabBottomLine.backgroundColor = _topTabBottomLineColor;
         [_topTabScrollView addSubview:topTabBottomLine];
         
-        _lineBottom = [[UIView alloc] initWithFrame:CGRectMake(0, TAB_HEIGHT - LINEBOTTOM_HEIGHT,[_titleSizeArray[0] CGSizeValue].width, LINEBOTTOM_HEIGHT)];
-        _lineBottom.center = CGPointMake([centerPoints[0] floatValue], _lineBottom.center.y);
+        _lineBottom = [[UIView alloc] initWithFrame:CGRectMake(0, TAB_HEIGHT - LINEBOTTOM_HEIGHT,[_titleSizeArray[self.defaultSubscript] CGSizeValue].width, LINEBOTTOM_HEIGHT)];
+        _lineBottom.center = CGPointMake([centerPoints[self.defaultSubscript] floatValue], _lineBottom.center.y);
         _lineBottom.backgroundColor = _selectedColor;
         [_topTabScrollView addSubview:_lineBottom];
     }
@@ -257,7 +258,7 @@
         _scrollView.pagingEnabled = YES;
         _scrollView.showsHorizontalScrollIndicator = YES;
         [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
-        self.currentPage = 0;
+        self.currentPage = self.defaultSubscript;
     }
     return _scrollView;
 }

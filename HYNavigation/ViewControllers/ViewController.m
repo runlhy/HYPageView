@@ -58,6 +58,7 @@
     [rightButton setTintColor:[UIColor blackColor]];
     rightButton.transform = CGAffineTransformMakeScale(.5, .5);
     pageView.rightButton = rightButton;
+    pageView.defaultSubscript = 0;
     return pageView;
 }
 
@@ -71,6 +72,7 @@
     leftButton.transform = CGAffineTransformMakeScale(.7, .7);
     pageView.leftButton = leftButton;
     pageView.selectedColor = [UIColor colorWithRed:143./255 green:122/255. blue:16/255. alpha:1];
+    pageView.defaultSubscript = 1;
     return pageView;
 }
 
@@ -79,6 +81,7 @@
     
     pageView.selectedColor = [UIColor redColor];
     pageView.unselectedColor = [UIColor blackColor];
+    pageView.defaultSubscript = 2;
     
     return pageView;
 }
@@ -89,6 +92,7 @@
     pageView.selectedColor = [UIColor redColor];
     pageView.unselectedColor = [UIColor blackColor];
     pageView.font = [UIFont fontWithName:@"Zapfino" size:16];
+    pageView.defaultSubscript = 2;
     return pageView;
 }
 
@@ -98,6 +102,7 @@
     pageView.selectedColor = [UIColor blueColor];
     pageView.unselectedColor = [UIColor blackColor];
     pageView.font = [UIFont fontWithName:@"HoeflerText-Black" size:18];
+    pageView.defaultSubscript = 4;
     return pageView;
 }
 

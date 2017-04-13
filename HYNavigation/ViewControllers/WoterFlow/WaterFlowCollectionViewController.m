@@ -23,8 +23,8 @@
 
 @implementation WaterFlowCollectionViewController
 
--(void)dealloc{
-    NSLog(@"%@",self.class);
+- (void)dealloc{
+    //NSLog(@"%@",self.class);
 }
 
 - (NSMutableArray *)randomDataArray
