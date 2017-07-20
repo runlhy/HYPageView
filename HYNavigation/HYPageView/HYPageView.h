@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface HYPageView : UIScrollView
+typedef NS_ENUM(NSInteger, HYPageViewStyle) {
+    HYPageViewStyleA,
+    HYPageViewStyleB
+};
 
 // Personalized configuration properties
 @property (nonatomic, strong) UIFont *font;
@@ -19,6 +23,7 @@
 @property (nonatomic, assign) CGFloat rightSpace;
 @property (nonatomic, assign) CGFloat minSpace;
 @property (nonatomic, assign) NSInteger defaultSubscript;
+@property (nonatomic, assign) HYPageViewStyle pageViewStyle;
 /**
  default 20.
  For translucent status bar

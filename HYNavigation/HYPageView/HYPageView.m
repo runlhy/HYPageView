@@ -190,23 +190,17 @@
             totalWidth = _topTabScrollViewWidth;
         }
         _centerPoints = centerPoints;
-        _width_k_array = [NSMutableArray array];
-        _width_b_array = [NSMutableArray array];
-        _point_k_array = [NSMutableArray array];
-        _point_b_array = [NSMutableArray array];
         
-        for (NSInteger i=0; i<_titles.count-1; i++) {
-            CGFloat k = ([_centerPoints[i+1] floatValue] - [_centerPoints[i] floatValue])/_selfFrame.size.width;
-            CGFloat b = [_centerPoints[i] floatValue] - k * i * _selfFrame.size.width;
-            [_width_k_array addObject:[NSNumber numberWithFloat:k]];
-            [_width_b_array addObject:[NSNumber numberWithFloat:b]];
+        
+        NSMutableArray *calculationArray = [self calculationAstyle];
+        if (self.pageViewStyle == HYPageViewStyleB) {
+            calculationArray = [self calculationBstyle];
         }
-        for (NSInteger i=0; i<_titles.count-1; i++) {
-            CGFloat k = ([_titleSizeArray[i+1] CGSizeValue].width - [_titleSizeArray[i] CGSizeValue].width)/_selfFrame.size.width;
-            CGFloat b = [_titleSizeArray[i] CGSizeValue].width - k * i * _selfFrame.size.width;
-            [_point_k_array addObject:[NSNumber numberWithFloat:k]];
-            [_point_b_array addObject:[NSNumber numberWithFloat:b]];
-        }
+        
+        _width_k_array = calculationArray[0];
+        _width_b_array = calculationArray[1];
+        _point_k_array = calculationArray[2];
+        _point_b_array = calculationArray[3];
         
         _topTabScrollView.contentSize = CGSizeMake(totalWidth, 0);
         _titleButtons = [NSMutableArray array];
@@ -238,6 +232,87 @@
     }
     return _topTabScrollView;
 }
+
+- (NSMutableArray *)calculationAstyle{
+    
+    NSMutableArray *width_k_array = [NSMutableArray array];
+    NSMutableArray *width_b_array = [NSMutableArray array];
+    NSMutableArray *point_k_array = [NSMutableArray array];
+    NSMutableArray *point_b_array = [NSMutableArray array];
+    
+    NSMutableArray *calculationArray = [NSMutableArray array];
+    
+    for (NSInteger i=0; i<_titles.count-1; i++) {
+        CGFloat k = ([_titleSizeArray[i+1] CGSizeValue].width - [_titleSizeArray[i] CGSizeValue].width)/_selfFrame.size.width;
+        CGFloat b = [_titleSizeArray[i] CGSizeValue].width - k * i * _selfFrame.size.width;
+        [width_k_array addObject:[NSNumber numberWithFloat:k]];
+        [width_b_array addObject:[NSNumber numberWithFloat:b]];
+    }
+    for (NSInteger i=0; i<_titles.count-1; i++) {
+        CGFloat k = ([_centerPoints[i+1] floatValue] - [_centerPoints[i] floatValue])/_selfFrame.size.width;
+        CGFloat b = [_centerPoints[i] floatValue] - k * i * _selfFrame.size.width;
+        
+        [point_k_array addObject:[NSNumber numberWithFloat:k]];
+        [point_b_array addObject:[NSNumber numberWithFloat:b]];
+    }
+    [calculationArray addObjectsFromArray:@[width_k_array, width_b_array, point_k_array, point_b_array]];
+    
+    return calculationArray;
+}
+
+- (NSMutableArray *)calculationBstyle{
+    
+    NSMutableArray *width_k_array = [NSMutableArray array];
+    NSMutableArray *width_b_array = [NSMutableArray array];
+    NSMutableArray *point_k_array = [NSMutableArray array];
+    NSMutableArray *point_b_array = [NSMutableArray array];
+    
+    NSMutableArray *calculationArray = [NSMutableArray array];
+    
+    for (NSInteger i=0; i<_titles.count-1; i++) {
+        
+        CGFloat startPointX = [_centerPoints[i] floatValue] - ([_titleSizeArray[i] CGSizeValue].width/2);
+        CGFloat endPointX = ([_centerPoints[i+1] floatValue] + ([_titleSizeArray[i+1] CGSizeValue].width/2));
+        CGFloat distance = endPointX - startPointX;
+        
+        CGFloat k0 = 2*(distance - [_titleSizeArray[i] CGSizeValue].width)/_selfFrame.size.width;
+        CGFloat b0 = [_titleSizeArray[i] CGSizeValue].width - k0 * (2*i) * (_selfFrame.size.width/2);
+        
+        [width_k_array addObject:[NSNumber numberWithFloat:k0]];
+        [width_b_array addObject:[NSNumber numberWithFloat:b0]];
+        
+        CGFloat k1 = 2*([_titleSizeArray[i+1] CGSizeValue].width - distance)/_selfFrame.size.width;
+        CGFloat b1 = distance - k1 * (2*i+1) * _selfFrame.size.width/2;
+        
+        [width_k_array addObject:[NSNumber numberWithFloat:k1]];
+        [width_b_array addObject:[NSNumber numberWithFloat:b1]];
+    }
+    
+    for (NSInteger i=0; i<_titles.count-1; i++) {
+        
+        CGFloat startPointX = [_centerPoints[i] floatValue] - ([_titleSizeArray[i] CGSizeValue].width/2);
+        CGFloat endPointX = ([_centerPoints[i+1] floatValue] + ([_titleSizeArray[i+1] CGSizeValue].width/2));
+        CGFloat distance = endPointX - startPointX;
+        CGFloat midpointX = startPointX + distance/2;
+        
+        CGFloat k0 = (midpointX - [_centerPoints[i] floatValue])/_selfFrame.size.width*2;
+        CGFloat b0 = [_centerPoints[i] floatValue] - k0 * (2*i) * _selfFrame.size.width/2;
+        
+        [point_k_array addObject:[NSNumber numberWithFloat:k0]];
+        [point_b_array addObject:[NSNumber numberWithFloat:b0]];
+        
+        
+        CGFloat k1 = ([_centerPoints[i+1] floatValue] - midpointX)/_selfFrame.size.width*2;
+        CGFloat b1 = midpointX - k1 * (2*i+1) * _selfFrame.size.width/2;
+        
+        [point_k_array addObject:[NSNumber numberWithFloat:k1]];
+        [point_b_array addObject:[NSNumber numberWithFloat:b1]];
+    }
+    [calculationArray addObjectsFromArray:@[width_k_array, width_b_array, point_k_array, point_b_array]];
+    
+    return calculationArray;
+}
+
 
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
@@ -274,6 +349,11 @@
 
 - (CGFloat)getTitleWidth:(CGFloat)offset{
     NSInteger index = (NSInteger)(offset / _selfFrame.size.width);
+    
+    if (self.pageViewStyle == HYPageViewStyleB) {
+        index = (NSInteger)(offset / _selfFrame.size.width * 1.99999);
+    }
+    
     CGFloat k = [_width_k_array[index] floatValue];
     CGFloat b = [_width_b_array[index] floatValue];
     CGFloat x = offset;
@@ -282,6 +362,10 @@
 
 - (CGFloat)getTitlePoint:(CGFloat)offset{
     NSInteger index = (NSInteger)(offset / _selfFrame.size.width);
+    
+    if (self.pageViewStyle == HYPageViewStyleB) {
+        index = (NSInteger)(offset / _selfFrame.size.width * 1.99999);
+    }
     CGFloat k = [_point_k_array[index] floatValue];
     CGFloat b = [_point_b_array[index] floatValue];
     CGFloat x = offset;
@@ -302,8 +386,8 @@
     if (scrollView.contentOffset.x<=0 || scrollView.contentOffset.x >= _selfFrame.size.width * (_titles.count-1)) {
         return;
     }
-    _lineBottom.center = CGPointMake([self getTitleWidth:scrollView.contentOffset.x], _lineBottom.center.y);
-    _lineBottom.bounds = CGRectMake(0, 0, [self getTitlePoint:scrollView.contentOffset.x], LINEBOTTOM_HEIGHT);
+    _lineBottom.center = CGPointMake([self getTitlePoint:scrollView.contentOffset.x], _lineBottom.center.y);
+    _lineBottom.bounds = CGRectMake(0, 0, [self getTitleWidth:scrollView.contentOffset.x], LINEBOTTOM_HEIGHT);
     CGFloat page = (NSInteger)((scrollView.contentOffset.x + _selfFrame.size.width / 2) / _selfFrame.size.width);
     [self updateSelectedPage:page];
 }

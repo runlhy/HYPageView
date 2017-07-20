@@ -64,6 +64,7 @@
 
 - (HYPageView *)test1 {
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"精选",@"片库",@"电影",@"韩剧",@"德云社",@"动漫",@"电视剧",@"纪录片"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
+    pageView.pageViewStyle = HYPageViewStyleB;
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [leftButton setImage:[UIImage imageNamed:@"search_"] forState:UIControlStateNormal];
     pageView.isAdapteNavigationBar = NO;
@@ -88,7 +89,7 @@
 
 - (HYPageView *)test3 {
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"One",@"Two",@"Three",@"Four",@"Five",@"Six"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
-    
+    pageView.pageViewStyle = HYPageViewStyleB;
     pageView.selectedColor = [UIColor redColor];
     pageView.unselectedColor = [UIColor blackColor];
     pageView.font = [UIFont fontWithName:@"Zapfino" size:16];
@@ -97,7 +98,10 @@
 }
 
 - (HYPageView *)test4 {
+    
     HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"我实在",@"也",@"想不出",@"头上",@"写",@"点啥了"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
+    pageView.pageViewStyle = HYPageViewStyleB;
+    
     pageView.isAnimated = YES;
     pageView.selectedColor = [UIColor blueColor];
     pageView.unselectedColor = [UIColor blackColor];
