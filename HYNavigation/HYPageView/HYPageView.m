@@ -9,7 +9,7 @@
 #define RIGHT_SPACE 20
 #define MIN_SPACING 20
 #define TAB_HEIGHT 44
-#define LINEBOTTOM_HEIGHT 3
+#define LINEBOTTOM_HEIGHT 2
 #define TOPBOTTOMLINEBOTTOM_HEIGHT .5
 #define SELECTED_COLOR [UIColor colorWithRed:65/255.0 green:105/255.0 blue:225/255.0 alpha:1.0]
 #define UNSELECTED_COLOR [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:1.0]
@@ -83,6 +83,7 @@
         _parameters            = parameters;
         _topSpace              = 20;
         _isAverage             = YES;
+        _isShowTopTabBottomLine= YES;
         _isTranslucent         = YES;
         _isAnimated            = NO;
         _isAdapteNavigationBar = YES;
@@ -123,6 +124,9 @@
         }else{
             _topTabView.backgroundColor = [UIColor whiteColor];
         }
+        if (_topTabViewColor) {
+            _topTabView.backgroundColor = _topTabViewColor;
+        }
         if (self.leftButton) {
             self.leftButton.center = CGPointMake(self.leftButton.bounds.size.width / 2, TAB_HEIGHT / 2 + _topSpace);
             [_topTabView addSubview:self.leftButton];
@@ -131,15 +135,13 @@
             self.rightButton.center = CGPointMake(_selfFrame.size.width - self.rightButton.bounds.size.width / 2, TAB_HEIGHT / 2 + _topSpace);
             [_topTabView addSubview:self.rightButton];
         }
-        UIView *topTabBottomLine = [UIView new];
-        topTabBottomLine.frame = CGRectMake(0, TAB_HEIGHT + _topSpace - TOPBOTTOMLINEBOTTOM_HEIGHT, _selfFrame.size.width, TOPBOTTOMLINEBOTTOM_HEIGHT);
-        topTabBottomLine.backgroundColor = _topTabBottomLineColor;
         
-        if (_topTabViewColor) {
-            _topTabView.backgroundColor = _topTabViewColor;
+        if (_isShowTopTabBottomLine) {
+            UIView *topTabBottomLine = [UIView new];
+            topTabBottomLine.frame = CGRectMake(0, TAB_HEIGHT + _topSpace - TOPBOTTOMLINEBOTTOM_HEIGHT, _selfFrame.size.width, TOPBOTTOMLINEBOTTOM_HEIGHT);
+            topTabBottomLine.backgroundColor = _topTabBottomLineColor;
+            [_topTabView addSubview:topTabBottomLine];
         }
-        
-        [_topTabView addSubview:topTabBottomLine];
     }
     return _topTabView;
 }
@@ -158,7 +160,7 @@
         CGRect frame = CGRectMake(leftWidth, _topSpace + _topTabView.frame.origin.y, _topTabScrollViewWidth, TAB_HEIGHT);
         _topTabScrollView = [[UIScrollView alloc] initWithFrame:frame];
         _topTabScrollView.showsHorizontalScrollIndicator = NO;
-        _topTabScrollView.alwaysBounceHorizontal = YES;
+        _topTabScrollView.alwaysBounceHorizontal = NO;
         _topTabScrollView.scrollsToTop = NO;
         
         CGFloat totalWidth = 0;
@@ -225,10 +227,13 @@
         [self updateSelectedPage:self.defaultSubscript];
         [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * self.defaultSubscript, 0) animated:NO];
         
-        UIView *topTabBottomLine = [UIView new];
-        topTabBottomLine.frame = CGRectMake(-totalWidth, TAB_HEIGHT - TOPBOTTOMLINEBOTTOM_HEIGHT, totalWidth*3, TOPBOTTOMLINEBOTTOM_HEIGHT);
-        topTabBottomLine.backgroundColor = _topTabBottomLineColor;
-        [_topTabScrollView addSubview:topTabBottomLine];
+        
+        if (_isShowTopTabBottomLine) {
+            UIView *topTabBottomLine = [UIView new];
+            topTabBottomLine.frame = CGRectMake(-totalWidth, TAB_HEIGHT - TOPBOTTOMLINEBOTTOM_HEIGHT, totalWidth*3, TOPBOTTOMLINEBOTTOM_HEIGHT);
+            topTabBottomLine.backgroundColor = _topTabBottomLineColor;
+            [_topTabScrollView addSubview:topTabBottomLine];
+        }
         
         _lineBottom = [[UIView alloc] initWithFrame:CGRectMake(0, TAB_HEIGHT - LINEBOTTOM_HEIGHT,[_titleSizeArray[self.defaultSubscript] CGSizeValue].width, LINEBOTTOM_HEIGHT)];
         _lineBottom.center = CGPointMake([centerPoints[self.defaultSubscript] floatValue], _lineBottom.center.y);
@@ -336,7 +341,10 @@
         _scrollView.backgroundColor = [UIColor whiteColor];
         _scrollView.contentSize = CGSizeMake(_selfFrame.size.width * _titles.count, 0);
         _scrollView.pagingEnabled = YES;
-        _scrollView.showsHorizontalScrollIndicator = YES;
+        
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        
+        
         [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
         self.currentPage = self.defaultSubscript;
     }
@@ -465,7 +473,13 @@
         }
         for (NSInteger i=0; i<_viewControllers.count; i++) {
             if (page == i) {
-                NSString *className = _viewControllers[page];
+                
+                
+                NSString *className = @"HYPAGEVIEW_Controller";
+                
+                if ([[_viewControllers[page] class] isSubclassOfClass:[NSString class]]) {
+                    className = _viewControllers[page];
+                }
                 
                 for (NSInteger j=0; j<self.strongArray.count; j++) {
                     id obj = self.strongArray[j];
@@ -494,9 +508,16 @@
                 if ([className isEqualToString:@"HYPAGEVIEW_AlreadyCreated"]) {
                     return;
                 }
-                Class class = NSClassFromString(className);
                 
-                UIViewController *viewController = class.new;
+                
+                UIViewController *viewController = nil;
+                if (![className isEqualToString:@"HYPAGEVIEW_Controller"]) {
+                    Class class = NSClassFromString(className);
+                    viewController = class.new;
+                }else{
+                    viewController = _viewControllers[page];
+                }
+                
                 self.strongArray[i] = viewController;
                 
                 if (_parameters && _parameters.count > i && _parameters[i] && [self getVariableWithClass:viewController.class varName:@"parameter"]) {

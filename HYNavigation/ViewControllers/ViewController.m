@@ -63,11 +63,15 @@
 }
 
 - (HYPageView *)test1 {
-    HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"精选",@"片库",@"电影",@"韩剧",@"德云社",@"动漫",@"电视剧",@"纪录片"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"FirstViewViewController"] withParameters:nil];
+    
+    WaterFlowCollectionViewController *vc = [WaterFlowCollectionViewController new];
+    
+    HYPageView *pageView = [[HYPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) withTitles:@[@"精选",@"片库",@"电影",@"韩剧",@"德云社",@"动漫",@"电视剧",@"纪录片"] withViewControllers:@[@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",@"WaterFlowCollectionViewController",vc,@"FirstViewViewController"] withParameters:nil];
     pageView.pageViewStyle = HYPageViewStyleB;
     
     pageView.isTranslucent = NO;
-    pageView.topTabViewColor = [UIColor yellowColor];
+    pageView.topTabViewColor = [UIColor colorWithRed:211/255. green:111/255. blue:39/255. alpha:.5];
+    pageView.selectedColor = [UIColor yellowColor];
     
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [leftButton setImage:[UIImage imageNamed:@"search_"] forState:UIControlStateNormal];
@@ -76,7 +80,6 @@
     [leftButton setTintColor:[UIColor blackColor]];
     leftButton.transform = CGAffineTransformMakeScale(.7, .7);
     pageView.leftButton = leftButton;
-    pageView.selectedColor = [UIColor colorWithRed:143./255 green:122/255. blue:16/255. alpha:1];
     pageView.defaultSubscript = 1;
     return pageView;
 }

@@ -49,6 +49,9 @@ typedef NS_ENUM(NSInteger, HYPageViewStyle) {
  default YES ,Valid when only one page can be filled with all buttons
  */
 @property (nonatomic, assign) BOOL isAverage;
+
+@property (nonatomic, assign) BOOL isShowTopTabBottomLine;
+
 /**
  Initializes and returns a newly allocated view object with the specified frame rectangle.
  
