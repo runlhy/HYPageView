@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, HYPageViewStyle) {
 
 // Personalized configuration properties
 @property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIColor *topTabViewColor;
 @property (nonatomic, strong) UIColor *selectedColor;
 @property (nonatomic, strong) UIColor *unselectedColor;
 @property (nonatomic, strong) UIColor *topTabBottomLineColor;

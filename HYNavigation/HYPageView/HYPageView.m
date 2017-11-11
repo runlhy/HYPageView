@@ -134,6 +134,11 @@
         UIView *topTabBottomLine = [UIView new];
         topTabBottomLine.frame = CGRectMake(0, TAB_HEIGHT + _topSpace - TOPBOTTOMLINEBOTTOM_HEIGHT, _selfFrame.size.width, TOPBOTTOMLINEBOTTOM_HEIGHT);
         topTabBottomLine.backgroundColor = _topTabBottomLineColor;
+        
+        if (_topTabViewColor) {
+            _topTabView.backgroundColor = _topTabViewColor;
+        }
+        
         [_topTabView addSubview:topTabBottomLine];
     }
     return _topTabView;
