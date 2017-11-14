@@ -87,6 +87,9 @@
         _isTranslucent         = YES;
         _isAnimated            = NO;
         _isAdapteNavigationBar = YES;
+        _bodyPageBounces       = YES;
+        _bodyPageScrollEnabled = YES;
+        _topTabBounces         = NO;
     }
     return self;
 }
@@ -124,9 +127,6 @@
         }else{
             _topTabView.backgroundColor = [UIColor whiteColor];
         }
-        if (_topTabViewColor) {
-            _topTabView.backgroundColor = _topTabViewColor;
-        }
         if (self.leftButton) {
             self.leftButton.center = CGPointMake(self.leftButton.bounds.size.width / 2, TAB_HEIGHT / 2 + _topSpace);
             [_topTabView addSubview:self.leftButton];
@@ -159,9 +159,10 @@
         _topTabScrollViewWidth = _selfFrame.size.width - leftWidth - rightWidth;
         CGRect frame = CGRectMake(leftWidth, _topSpace + _topTabView.frame.origin.y, _topTabScrollViewWidth, TAB_HEIGHT);
         _topTabScrollView = [[UIScrollView alloc] initWithFrame:frame];
+        
         _topTabScrollView.showsHorizontalScrollIndicator = NO;
-        _topTabScrollView.alwaysBounceHorizontal = NO;
         _topTabScrollView.scrollsToTop = NO;
+        _topTabScrollView.bounces = _topTabBounces;
         
         CGFloat totalWidth = 0;
         _titleSizeArray    = [NSMutableArray array];
@@ -222,7 +223,7 @@
             CGRect buttonFrame = CGRectMake(x-width/2, 0, width, TAB_HEIGHT);
             titleButton.frame = buttonFrame;
             [_topTabScrollView addSubview:titleButton];
-            [titleButton addTarget:self action:@selector(touchAction:) forControlEvents:UIControlEventTouchUpInside];
+            [titleButton addTarget:self action:@selector(clickAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         [self updateSelectedPage:self.defaultSubscript];
         [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * self.defaultSubscript, 0) animated:NO];
@@ -323,11 +324,15 @@
     return calculationArray;
 }
 
-
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
+        
         _scrollView.scrollsToTop = NO;
+        _scrollView.pagingEnabled = YES;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.bounces = _bodyPageBounces;
+        _scrollView.scrollEnabled = _bodyPageScrollEnabled;
         
         CGFloat y = 0;
         if (_viewController.navigationController && !_viewController.navigationController.navigationBar.hidden && !_viewController.navigationController.navigationBarHidden) {
@@ -335,16 +340,10 @@
         }else if (_viewController.navigationController && (_viewController.navigationController.navigationBar.hidden || _viewController.navigationController.navigationBarHidden)){
             y = -20;
         }
-        
         _scrollView.frame = CGRectMake(0, y, _selfFrame.size.width, _selfFrame.size.height);
         _scrollView.delegate = self;
         _scrollView.backgroundColor = [UIColor whiteColor];
         _scrollView.contentSize = CGSizeMake(_selfFrame.size.width * _titles.count, 0);
-        _scrollView.pagingEnabled = YES;
-        
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        
-        
         [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:nil];
         self.currentPage = self.defaultSubscript;
     }
@@ -407,8 +406,12 @@
 
 #pragma mark - My Method
 
-- (void)touchAction:(UIButton *)button {
+- (void)clickAction:(UIButton *)button {
     [_scrollView setContentOffset:CGPointMake(_selfFrame.size.width * button.tag, 0) animated:YES];
+    
+    if (self.clickTitleBlock) {
+        self.clickTitleBlock(button.tag);
+    }
 }
 
 - (void)updateSelectedPage:(NSInteger)page{

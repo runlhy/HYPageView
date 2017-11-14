@@ -8,15 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^ClickTitleBlock)(NSInteger);
+
 @interface HYPageView : UIScrollView
 typedef NS_ENUM(NSInteger, HYPageViewStyle) {
     HYPageViewStyleA,
     HYPageViewStyleB
 };
 
+/** TitleButton Block */
+@property (nonatomic, copy) ClickTitleBlock clickTitleBlock;
+
 // Personalized configuration properties
 @property (nonatomic, strong) UIFont *font;
-@property (nonatomic, strong) UIColor *topTabViewColor;
 @property (nonatomic, strong) UIColor *selectedColor;
 @property (nonatomic, strong) UIColor *unselectedColor;
 @property (nonatomic, strong) UIColor *topTabBottomLineColor;
@@ -49,8 +53,24 @@ typedef NS_ENUM(NSInteger, HYPageViewStyle) {
  default YES ,Valid when only one page can be filled with all buttons
  */
 @property (nonatomic, assign) BOOL isAverage;
-
+/**
+ default YES .
+ */
 @property (nonatomic, assign) BOOL isShowTopTabBottomLine;
+/**
+ default YES .
+ */
+@property (nonatomic, assign) BOOL bodyPageBounces;
+/**
+ default YES .
+ */
+@property (nonatomic, assign) BOOL bodyPageScrollEnabled;
+/**
+ default NO .
+ */
+@property (nonatomic, assign) BOOL topTabBounces;
+
+
 
 /**
  Initializes and returns a newly allocated view object with the specified frame rectangle.
